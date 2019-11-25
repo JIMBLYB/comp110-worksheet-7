@@ -24,7 +24,32 @@ namespace comp110_worksheet_7
 		// Return the total size, in bytes, of all the files below the given directory
 		public static long GetTotalSize(string directory)
 		{
-			throw new NotImplementedException();
+            long directorySize = 0;
+            Stack<string> directoriesLeft = new Stack<string>();
+            directoriesLeft.Push(directory);
+            while(directoriesLeft.Count != 0)
+            {
+                foreach (string newDirectory in Directory.GetDirectories(directoriesLeft.Pop()))
+                {
+                    if (Directory.GetDirectories(newDirectory) != null)
+                    {
+                        foreach (string addDirectory in Directory.GetDirectories(newDirectory))
+                        {
+                            Console.WriteLine(addDirectory);
+                            directoriesLeft.Push(addDirectory);
+                        }
+                    }
+                    if (Directory.GetFiles(newDirectory) != null)
+                    {
+                        foreach(string file in Directory.GetFiles(newDirectory))
+                        {
+                            Console.WriteLine(file);
+                            directorySize += GetFileSize(file);
+                        }
+                    }                  
+                }
+            }
+            return directorySize;
 		}
 
 		// Return the number of files (not counting directories) below the given directory
